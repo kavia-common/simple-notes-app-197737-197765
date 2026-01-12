@@ -1,104 +1,377 @@
-/* CSS Variables for Theme Management */
+/* Theme variables (light, modern) */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
-  --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
-}
+  --primary: #3b82f6;
+  --success: #06b6d4;
+  --secondary: #64748b;
+  --error: #ef4444;
 
-[data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
+  --bg: #f9fafb;
+  --surface: #ffffff;
+  --text: #111827;
+
+  --border: rgba(17, 24, 39, 0.10);
+  --shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+  --shadow-sm: 0 6px 16px rgba(17, 24, 39, 0.08);
+
+  --radius: 14px;
+  --radius-sm: 10px;
+
+  --focus: 0 0 0 4px rgba(59, 130, 246, 0.22);
 }
 
 .App {
-  text-align: center;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background: var(--bg);
+  color: var(--text);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Layout */
+.Header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(249, 250, 251, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.HeaderInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.App-header {
-  background-color: var(--bg-secondary);
-  min-height: 100vh;
+.HeaderBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.HeaderMark {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: white;
+  background: linear-gradient(135deg, var(--primary), var(--success));
+  box-shadow: var(--shadow-sm);
+}
+
+.HeaderTitles {
+  min-width: 0;
+}
+
+.HeaderTitle {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.HeaderSubtitle {
+  margin: 2px 0 0 0;
+  font-size: 13px;
+  color: var(--secondary);
+}
+
+.HeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.Main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 16px 24px 16px;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+}
+
+.Sidebar,
+.Editor {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.Sidebar {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
-  position: relative;
+  min-height: 520px;
 }
 
-.App-link {
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
+.Editor {
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
 }
 
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
+/* Controls */
+.Btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 10px 12px;
   font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.08s ease, box-shadow 0.12s ease, background 0.12s ease,
+    border-color 0.12s ease, color 0.12s ease;
 }
 
-.theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
+.Btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
-.theme-toggle:active {
+.Btn:active {
   transform: translateY(0);
+  box-shadow: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
 }
 
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
+.BtnPrimary {
+  border-color: rgba(59, 130, 246, 0.25);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.92), rgba(6, 182, 212, 0.92));
+  color: white;
+}
+
+.BtnDanger {
+  border-color: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.10);
+  color: #b91c1c;
+}
+
+.BtnSmall {
+  padding: 8px 10px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+
+.Input,
+.Textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface);
+  outline: none;
+}
+
+.Input:focus,
+.Textarea:focus {
+  border-color: rgba(59, 130, 246, 0.35);
+  box-shadow: var(--focus);
+}
+
+.Textarea {
+  resize: vertical;
+  min-height: 280px;
+  line-height: 1.45;
+}
+
+.Label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 8px;
+}
+
+.SrOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Search */
+.SearchBar {
+  padding: 14px 14px 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(59,130,246,0.06), rgba(255,255,255,0));
+}
+
+.SearchMeta {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--secondary);
+}
+
+/* Notes list */
+.NotesList {
+  list-style: none;
+  padding: 12px;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  overflow: auto;
+}
+
+.NotesListItem {
+  margin: 0;
+}
+
+.NotesEmpty {
+  padding: 18px 16px;
+  color: var(--secondary);
+}
+
+.NotesEmptyTitle {
+  margin: 0;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.NotesEmptyText {
+  margin: 6px 0 0 0;
+  font-size: 14px;
+}
+
+/* Note card */
+.NoteCard {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: stretch;
+}
+
+.NoteCardActive {
+  border-color: rgba(59, 130, 246, 0.35);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.10);
+}
+
+.NoteCardMain {
+  appearance: none;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 12px 12px;
+  cursor: pointer;
+  display: grid;
+  gap: 8px;
+}
+
+.NoteCardMain:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+  border-radius: 12px;
+}
+
+.NoteCardTitleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.NoteCardTitle {
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.NoteCardBody {
+  font-size: 13px;
+  color: rgba(17, 24, 39, 0.75);
+  line-height: 1.35;
+}
+
+.NoteCardMeta {
+  font-size: 12px;
+  color: var(--secondary);
+}
+
+.NoteCardActions {
+  padding: 10px 10px 10px 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Editor */
+.NoteForm {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+.NoteFormRowGrow {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.EmptyState {
+  padding: 20px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.EmptyStateTitle {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+
+.EmptyStateText {
+  margin: 0;
+  color: var(--secondary);
+}
+
+/* Footer */
+.Footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 20px 16px;
+}
+
+.FooterText {
+  display: inline-block;
+  color: var(--secondary);
+  font-size: 12px;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .Main {
+    grid-template-columns: 1fr;
+  }
+
+  .Sidebar,
+  .Editor {
+    min-height: auto;
   }
 }
