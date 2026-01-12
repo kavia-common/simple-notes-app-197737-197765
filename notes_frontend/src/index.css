@@ -1,5 +1,10 @@
 :root {
+  /* Default; overridden by theme attribute selectors below */
   color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 body {
@@ -8,8 +13,10 @@ body {
     Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #f9fafb;
-  color: #111827;
+
+  /* Use theme variables so the page background matches the app */
+  background: var(--bg);
+  color: var(--text);
 }
 
 * {

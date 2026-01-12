@@ -4,7 +4,9 @@ import React from "react";
  * Header bar with application title and primary action.
  */
 // PUBLIC_INTERFACE
-export default function Header({ onCreateNew }) {
+export default function Header({ onCreateNew, theme, onToggleTheme }) {
+  const isDark = theme === "dark";
+
   return (
     <header className="Header">
       <div className="HeaderInner">
@@ -19,6 +21,22 @@ export default function Header({ onCreateNew }) {
         </div>
 
         <div className="HeaderActions">
+          <button
+            type="button"
+            className="Btn ThemeToggle"
+            onClick={onToggleTheme}
+            aria-pressed={isDark}
+            aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+            title={isDark ? "Switch to light theme" : "Switch to dark theme"}
+          >
+            <span className="ThemeToggleIcon" aria-hidden="true">
+              {isDark ? "☾" : "☀"}
+            </span>
+            <span className="ThemeToggleText">
+              {isDark ? "Dark" : "Light"}
+            </span>
+          </button>
+
           <button className="Btn BtnPrimary" onClick={onCreateNew}>
             New note
           </button>

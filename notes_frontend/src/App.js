@@ -12,6 +12,14 @@ import SearchBar from "./components/SearchBar";
 const STORAGE_KEY = "notes_frontend.notes.v1";
 
 /**
+ * LocalStorage key used for persisting theme selection.
+ * Kept separate from notes to avoid coupling.
+ */
+const THEME_KEY = "notes_frontend.theme.v1";
+
+/** @typedef {"light" | "dark"} Theme */
+
+/**
  * @typedef {Object} Note
  * @property {string} id
  * @property {string} title
@@ -34,12 +42,51 @@ function generateId() {
   return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
 }
 
+function getPreferredTheme() {
+  /** @type {Theme} */
+  const fallback = "light";
+  try {
+    const stored = window.localStorage.getItem(THEME_KEY);
+    if (stored === "light" || stored === "dark") return stored;
+
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    return prefersDark ? "dark" : "light";
+  } catch {
+    return fallback;
+  }
+}
+
+function applyThemeToRoot(theme) {
+  try {
+    // Apply theme at root level so CSS variables cascade everywhere.
+    document.documentElement.setAttribute("data-theme", theme);
+  } catch {
+    // No-op for environments without DOM (tests).
+  }
+}
+
 // PUBLIC_INTERFACE
 function App() {
   /** @type {[Note[], Function]} */
   const [notes, setNotes] = useState([]);
   const [activeNoteId, setActiveNoteId] = useState(null);
   const [query, setQuery] = useState("");
+
+  /** @type {[Theme, Function]} */
+  const [theme, setTheme] = useState(() => getPreferredTheme());
+
+  // Apply theme and persist whenever it changes.
+  useEffect(() => {
+    applyThemeToRoot(theme);
+    try {
+      window.localStorage.setItem(THEME_KEY, theme);
+    } catch {
+      // ignore write errors (private mode / storage disabled)
+    }
+  }, [theme]);
 
   // Load notes from localStorage on initial app start.
   useEffect(() => {
@@ -69,8 +116,7 @@ function App() {
 
     return list.filter((n) => {
       return (
-        n.title.toLowerCase().includes(q) ||
-        n.body.toLowerCase().includes(q)
+        n.title.toLowerCase().includes(q) || n.body.toLowerCase().includes(q)
       );
     });
   }, [notes, query]);
@@ -126,9 +172,17 @@ function App() {
     }
   };
 
+  const handleToggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
+
   return (
     <div className="App">
-      <Header onCreateNew={handleCreateNew} />
+      <Header
+        onCreateNew={handleCreateNew}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
+      />
 
       <main className="Main" aria-label="Notes application">
         <section className="Sidebar" aria-label="Notes list">
@@ -152,9 +206,7 @@ function App() {
           ) : (
             <div className="EmptyState" role="status" aria-live="polite">
               <h2 className="EmptyStateTitle">No note selected</h2>
-              <p className="EmptyStateText">
-                Create a new note to get started.
-              </p>
+              <p className="EmptyStateText">Create a new note to get started.</p>
               <button className="Btn BtnPrimary" onClick={handleCreateNew}>
                 New note
               </button>
